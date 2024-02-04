@@ -7,3 +7,6 @@ class Settings:
         self.screen_width = 1200
         self.screen_height = 800
         self.bg_color = (0,0,230) #연습문제 1 답임
+
+        #우주선 설정
+        self.ship_speed = 1.5

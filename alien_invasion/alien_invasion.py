@@ -15,8 +15,11 @@ class AlienInvasion:
         self.clock = pygame.time.Clock()
         self.settings = Settings() #
 
-        self.screen = pygame.display.set_mode(
-            (self.settings.screen_width, self.settings.screen_height)) #
+        self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN) #
+        self.settings.screen_width = self.screen.get_rect().width #
+        self.settings.screen_height = self.screen.get_rect().height #
+        
+
         pygame.display.set_caption("Alien Invasion")
 
         self.ship = Ship(self) # 
@@ -27,7 +30,8 @@ class AlienInvasion:
     def run_game(self):
         """게임의 메인 루프를 시작"""
         while True: #
-            self._check_events() # 보조메서드 호출함 
+            self._check_events() # 보조메서드 호출함
+            self.ship.update() 
             self._update_screen() # 보조메서드 호출
 
             #가장 최근 그린 화면을 표시합니다
@@ -39,6 +43,24 @@ class AlienInvasion:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            elif event.type == pygame.KEYDOWN: #
+                self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP: #
+                self._check_keyup_events(event)
+                
+    def _check_keydown_events(self,event):
+        """키를 누를때 응답"""
+        if event.key == pygame.K_RIGHT: #
+            self.ship.moving_right = True #
+        if event.key == pygame.K_LEFT: #
+            self.ship.moving_left = True #
+    
+    def _check_keyup_events(self,event):
+        """키에서 손을 뗄 때 응답합니다"""
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        if event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
 
     def _update_screen(self):
         """화면의 이미지를 업데이트하고 화면을 새로 그립니다"""
